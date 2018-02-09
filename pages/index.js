@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import factory from '../ethereum/factory.js'
+// import factory from '../ethereum/factory.js'
 import Layout from '../components/Layout';
-import web3 from '../ethereum/web3.js';
+// import web3 from '../ethereum/web3.js';
 import { Table, Grid, Card, Divider, Form, Input, Button, Message, Loader, Dimmer, Segment } from 'semantic-ui-react';
 
 class App extends Component {
@@ -13,18 +13,24 @@ class App extends Component {
     }
 
     static async getInitialProps(props) {
-        const numberOfBets = await factory.methods.numberOfBets().call();
-        const totalBet = await factory.methods.totalBet().call();
-        const minimumBet = await factory.methods.minimumBet().call();
-        const maxAmountofBets = await factory.methods.maxAmountOfBets().call();
-        const roundsWithOutWinner = await factory.methods.roundsWithOutWinner().call();
+        // const numberOfBets = await factory.methods.numberOfBets().call();
+        // const totalBet = await factory.methods.totalBet().call();
+        // const minimumBet = await factory.methods.minimumBet().call();
+        // const maxAmountofBets = await factory.methods.maxAmountOfBets().call();
+        // const roundsWithOutWinner = await factory.methods.roundsWithOutWinner().call();
         
         return {
-            numberOfBets,
-            totalBet: web3.utils.fromWei(totalBet, 'ether'),
-            minimumBet: web3.utils.fromWei(minimumBet, 'ether'),
-            maxAmountofBets,
-            roundsWithOutWinner
+            // numberOfBets,
+            // totalBet: web3.utils.fromWei(totalBet, 'ether'),
+            // minimumBet: web3.utils.fromWei(minimumBet, 'ether'),
+            // maxAmountofBets,
+            // roundsWithOutWinner
+
+            numberOfBets: 1,
+            totalBet: 0,
+            minimumBet: 0.1,
+            maxAmountofBets: 10,
+            roundsWithOutWinner: 1
         }
     }
 
@@ -78,7 +84,7 @@ class App extends Component {
         return (
             <div>
                 {numbers.map(number => (
-                    <Button animated="vertical" key={number} primary onClick={event => this.setState({ numberSelected: parseInt(number) })}>
+                    <Button animated="vertical" key={number} secondary onClick={event => this.setState({ numberSelected: parseInt(number) })}>
                         <Button.Content visible>{number}</Button.Content>
                         <Button.Content hidden>Bet</Button.Content>
                     </Button>
@@ -94,16 +100,16 @@ class App extends Component {
 
         this.setState({ loading: true, errorMessage: ''});
 
-        try {
-            const accounts = await web3.eth.getAccounts();
-            await factory.methods.bet(numberSelected).send({
-                from: accounts[0],
-                value: web3.utils.toWei(bet, 'ether'),
-                gas: '1000000'  
-            })
-        } catch (err) {
-            this.setState({ errorMessage: err.message})
-        }
+        // try {
+        //     const accounts = await web3.eth.getAccounts();
+        //     await factory.methods.bet(numberSelected).send({
+        //         from: accounts[0],
+        //         value: web3.utils.toWei(bet, 'ether'),
+        //         gas: '1000000'  
+        //     })
+        // } catch (err) {
+        //     this.setState({ errorMessage: err.message})
+        // }
 
         this.setState({ loading: false, errorMessage: ''})
     }
@@ -148,7 +154,7 @@ class App extends Component {
                                 </Form.Field>
                                 {this.renderNumbers()}
                             </Form>
-                            <Dimmer page="true" active={this.state.loading}>
+                            <Dimmer page={true} active={this.state.loading}>
                                 <Loader inline active={this.state.loading}>Processing Bet...</Loader>
                             </Dimmer>
                         </Column>
@@ -160,6 +166,18 @@ class App extends Component {
                             </Segment>
                         </Column>
                     </Row>
+
+                    <Row>
+                        <Column>
+                            <Divider />
+                        </Column>
+                    </Row>
+
+                    <Row>
+                        <Column>
+                        </Column>
+                    </Row>
+                    
 
                 </Grid>
             </Layout>
