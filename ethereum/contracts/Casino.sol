@@ -3,10 +3,10 @@ pragma solidity ^0.4.17;
 contract Casino {
     
     address public owner;
-    uint public minimumBet;
+    uint public minimumBet = 0.1 ether;
     uint public totalBet = 0;
-    uint public numberOfBets;
-    uint public maxAmountOfBets = 100;
+    uint public numberOfBets = 0;
+    uint public maxAmountOfBets = 10;
     address[] public players;
     
     struct Player {
@@ -18,13 +18,7 @@ contract Casino {
     
     function Casino() public {
         owner = msg.sender;
-        if(minimumBet != 0 ) minimumBet = minimumBet;
     }
-    
-    function kill() public {
-      if(msg.sender == owner)
-         selfdestruct(owner);
-   }
    
    function bet(uint number) public payable {
        assert(checkPlayerExists(msg.sender) == false);
@@ -33,32 +27,34 @@ contract Casino {
        
        playerInfo[msg.sender].amountBet = msg.value;
        playerInfo[msg.sender].numberSelected = number;
-       numberOfBets++;
+       numberOfBets += 1;
        players.push(msg.sender);
        totalBet += msg.value;
        
-       if(numberOfBets >= maxAmountOfBets) generateNumberWinner();
+       if (numberOfBets == maxAmountOfBets) {
+           generateNumberWinner();
+       }
    }
    
-   function checkPlayerExists(address player) public view returns (bool) {
+   function checkPlayerExists(address player) private view returns (bool) {
        for (uint i = 0; i < players.length; i++) {
-           if(players[i] == player) return true;
+           if (players[i] == player) return true;
        }
        return false;
    }
    
-   function generateNumberWinner() public {
+   function generateNumberWinner() private {
        uint numberGenerated = block.number % 10 + 1; // This isn't secure
        distributePrizes(numberGenerated);
     }
     
-    function distributePrizes(uint numberWinner) public {
+    function distributePrizes(uint numberWinner) private {
         address[100] memory winners;
         uint count = 0;
         
-        for (uint i=0; i< players.length; i++) {
+        for (uint i = 0; i < players.length; i++) {
             address playerAddress = players[i];
-            if(playerInfo[playerAddress].numberSelected == numberWinner) {
+            if (playerInfo[playerAddress].numberSelected == numberWinner) {
                 winners[count] = playerAddress;
                 count++;
             }
@@ -67,11 +63,12 @@ contract Casino {
         
         players.length = 0;
         
-        uint winnerEtherAmount = totalBet/winners.length;
+        uint winnerEtherAmount = totalBet/count;
         
-        for (uint j=0; j < count; j++) {
-            if (winners[j] != address(0))
-            winners[j].transfer(winnerEtherAmount);
+        for (uint j = 0; j < count; j++) {
+            if (winners[j] != address(0)) {
+                winners[j].transfer(winnerEtherAmount);
+            }
         }
     }
     
