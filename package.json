@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "compile": "node ./ethereum/compile.js",
+    "compile-test": "node ./ethereum/compile.js && npm run test",
+    "deploy": "node ./ethereum/deploy.js",
     "dev": "next"
   },
   "author": "",

@@ -1,6 +1,6 @@
 const HDWalletProvider = require('truffle-hdwallet-provider');
 const Web3 = require('web3');
-const compiledFactory = require('./build/CampaignFactory.json');
+const compiledFactory = require('./build/Casino.json');
 
 const provider = new HDWalletProvider(
   'spot shop alcohol vintage print credit north frame tuition execute youth wasp',

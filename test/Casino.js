@@ -22,7 +22,7 @@ describe('Casino', () => {
         assert.ok(casino.options.address);
     });
 
-    it('has the maxAmountOfBets set to 10', async () => {
+    it('has the maxAmountOfBets set to 5', async () => {
         const maxAmountOfBets = await casino.methods.maxAmountOfBets().call();
         assert.equal(10, maxAmountOfBets);
     })
@@ -174,6 +174,23 @@ describe('Casino', () => {
         }
 
         assert.equal(2, winnersPicked);
+    })
+
+    it('resets the contract after a winner is drawn', async () => {
+        for (let i=0; i<10; i++) {
+            await casino.methods.bet(i+1).send({
+                from: accounts[i],
+                value: web3.utils.toWei('5', 'ether'),
+                gas: '1000000'
+            })
+        }
+
+        const numberOfBets = await casino.methods.numberOfBets().call();
+        const totalBet = await casino.methods.totalBet().call();
+
+        assert.equal(0, numberOfBets);
+        assert.equal(0, totalBet);
+
     })
 
 })

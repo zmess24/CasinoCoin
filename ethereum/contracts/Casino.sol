@@ -7,6 +7,7 @@ contract Casino {
     uint public totalBet = 0;
     uint public numberOfBets = 0;
     uint public maxAmountOfBets = 10;
+    uint public roundsWithOutWinner = 0;
     address[] public players;
     
     struct Player {
@@ -62,14 +63,24 @@ contract Casino {
         }
         
         players.length = 0;
+
+        if (count > 0) {
+            uint winnerEtherAmount = totalBet/count;
         
-        uint winnerEtherAmount = totalBet/count;
-        
-        for (uint j = 0; j < count; j++) {
-            if (winners[j] != address(0)) {
-                winners[j].transfer(winnerEtherAmount);
+            for (uint j = 0; j < count; j++) {
+                if (winners[j] != address(0)) {
+                    winners[j].transfer(winnerEtherAmount);
+                }
             }
+
+            totalBet = 0;
+            numberOfBets = 0;    
+            roundsWithOutWinner = 0;
+        } else {
+            numberOfBets = 0;
+            roundsWithOutWinner++;
         }
+
     }
     
     function() public payable {}
