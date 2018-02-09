@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-// import factory from '../ethereum/factory.js'
+import factory from '../ethereum/factory.js'
 import Layout from '../components/Layout';
-// import web3 from '../ethereum/web3.js';
+import web3 from '../ethereum/web3.js';
+import Router from 'next/router';
 import { Table, Grid, Card, Divider, Form, Input, Label, Button, Message, Loader, Dimmer, Segment, Icon } from 'semantic-ui-react';
 
 class App extends Component {
@@ -17,24 +18,24 @@ class App extends Component {
     }
 
     static async getInitialProps(props) {
-        // const numberOfBets = await factory.methods.numberOfBets().call();
-        // const totalBet = await factory.methods.totalBet().call();
-        // const minimumBet = await factory.methods.minimumBet().call();
-        // const maxAmountofBets = await factory.methods.maxAmountOfBets().call();
-        // const roundsWithOutWinner = await factory.methods.roundsWithOutWinner().call();
+        const numberOfBets = await factory.methods.numberOfBets().call();
+        const totalBet = await factory.methods.totalBet().call();
+        const minimumBet = await factory.methods.minimumBet().call();
+        const maxAmountofBets = await factory.methods.maxAmountOfBets().call();
+        const roundsWithOutWinner = await factory.methods.roundsWithOutWinner().call();
         
         return {
-            // numberOfBets,
-            // totalBet: web3.utils.fromWei(totalBet, 'ether'),
-            // minimumBet: web3.utils.fromWei(minimumBet, 'ether'),
-            // maxAmountofBets,
-            // roundsWithOutWinner
+            numberOfBets,
+            totalBet: web3.utils.fromWei(totalBet, 'ether'),
+            minimumBet: web3.utils.fromWei(minimumBet, 'ether'),
+            maxAmountofBets,
+            roundsWithOutWinner
 
-            numberOfBets: 1,
-            totalBet: 0,
-            minimumBet: 0.1,
-            maxAmountofBets: 10,
-            roundsWithOutWinner: 1
+            // numberOfBets: 1,
+            // totalBet: 0,
+            // minimumBet: 0.1,
+            // maxAmountofBets: 10,
+            // roundsWithOutWinner: 1
         }
     }
 
@@ -88,7 +89,7 @@ class App extends Component {
         return (
             <div>
                 {numbers.map(number => (
-                    <Button disabled={this.state.loading} animated="vertical" key={number} secondary onClick={event => this.setState({ numberSelected: parseInt(number) })}>
+                    <Button disabled={this.state.loading} animated="vertical" key={number} secondary onClick={event => this.setState({ numberSelected: parseInt(number), success: false })}>
                         <Button.Content visible>{number}</Button.Content>
                         <Button.Content hidden>Bet</Button.Content>
                     </Button>
@@ -104,18 +105,53 @@ class App extends Component {
 
         this.setState({ loading: true });
 
-        // try {
-        //     const accounts = await web3.eth.getAccounts();
-        //     await factory.methods.bet(numberSelected).send({
-        //         from: accounts[0],
-        //         value: web3.utils.toWei(bet, 'ether'),
-        //         gas: '1000000'  
-        //     })
-        // } catch (err) {
-        //     this.setState({ error: true})
-        // }
+        try {
+            const accounts = await web3.eth.getAccounts();
+            await factory.methods.bet(numberSelected).send({
+                from: accounts[0],
+                value: web3.utils.toWei(bet, 'ether'),
+                gas: '1000000'  
+            })
 
-        // this.setState({ loading: false, statusMessage: 'Ready to accept transaction.', statusHeader: "Ready" })
+            this.setState({
+              loading: false,
+              statusMessage: 'Ready to accept transaction.',
+              statusHeader: "Ready",
+              success: true,
+              bet: ''
+            })
+
+            Router.push('/', {
+              shallow: true
+            });
+
+        } catch (err) {
+            let error = err.message
+
+            if (error === "while converting number to string, invalid number value '', should be a number matching (^-?[0-9.]+).") {
+                this.setState({
+                  loading: false,
+                  error: true,
+                  statusHeader: "Error",
+                  statusMessage: "Please enter an amount of ether to bet."
+                })
+            } else if (error.includes("Returned error: Error: MetaMask Tx Signature: User denied transaction signature")) {
+                this.setState({
+                  loading: false,
+                  error: true,
+                  statusHeader: "Error",
+                  statusMessage: "User denied transaction."
+                })
+            } else {
+                this.setState({
+                  loading: false,
+                  error: true,
+                  statusHeader: "Error",
+                  statusMessage: error
+                })
+            }
+        }
+
     }
 
     render() {
@@ -155,7 +191,7 @@ class App extends Component {
                                                 error={this.state.inputError}
                                                 placeholder="0.1"
                                                 value={this.state.bet}
-                                                onChange={event => this.setState({ bet: event.target.value })}
+                                                onChange={event => this.setState({ bet: event.target.value, success: false })}
                                             >
                                             </Input>
 
