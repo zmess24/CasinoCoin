@@ -9,6 +9,7 @@ export default props => {
         <div style={{ backgroundColor: '#eee' }}>
             <Head>
                 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
             </Head>
             <Header />
             <Container>

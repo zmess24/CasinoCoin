@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 // import factory from '../ethereum/factory.js'
 import Layout from '../components/Layout';
 // import web3 from '../ethereum/web3.js';
-import { Table, Grid, Card, Divider, Form, Input, Button, Message, Loader, Dimmer, Segment } from 'semantic-ui-react';
+import { Table, Grid, Card, Divider, Form, Input, Label, Button, Message, Loader, Dimmer, Segment, Icon } from 'semantic-ui-react';
 
 class App extends Component {
     state = {
         bet: '',
         numberSelected: 0,
-        errorMessage: '',
         loading: false,
+        inputError: false,
+        statusHeader: "Ready",
+        statusMessage: "Ready to accept transaction.",
+        success: false,
+        error: false
     }
 
     static async getInitialProps(props) {
@@ -72,7 +76,7 @@ class App extends Component {
             }
         ];
 
-        return <Card.Group items={items} itemsPerRow={5} />
+        return <Card.Group stackable items={items} itemsPerRow={5} />
     }
 
 
@@ -84,7 +88,7 @@ class App extends Component {
         return (
             <div>
                 {numbers.map(number => (
-                    <Button animated="vertical" key={number} secondary onClick={event => this.setState({ numberSelected: parseInt(number) })}>
+                    <Button disabled={this.state.loading} animated="vertical" key={number} secondary onClick={event => this.setState({ numberSelected: parseInt(number) })}>
                         <Button.Content visible>{number}</Button.Content>
                         <Button.Content hidden>Bet</Button.Content>
                     </Button>
@@ -98,7 +102,7 @@ class App extends Component {
 
         const { bet, numberSelected } = this.state;
 
-        this.setState({ loading: true, errorMessage: ''});
+        this.setState({ loading: true });
 
         // try {
         //     const accounts = await web3.eth.getAccounts();
@@ -108,10 +112,10 @@ class App extends Component {
         //         gas: '1000000'  
         //     })
         // } catch (err) {
-        //     this.setState({ errorMessage: err.message})
+        //     this.setState({ error: true})
         // }
 
-        this.setState({ loading: false, errorMessage: ''})
+        // this.setState({ loading: false, statusMessage: 'Ready to accept transaction.', statusHeader: "Ready" })
     }
 
     render() {
@@ -135,50 +139,87 @@ class App extends Component {
                         </Column>
                     </Row>
                     <Row>
-                        <Column>
-                            <h2>Bet on the next number!</h2>
-                        </Column>
-                    </Row>
-                    <Row>
                         <Column width={8}>
-                            <Form onSubmit={this.onSubmit}>
-                                <Form.Field>
-                                    <label>How much Ether do you want to bet?</label>
-                                    <Input
-                                        label="ether"
-                                        labelPosition="right"
-                                        value={this.state.bet}
-                                        onChange={event => this.setState({ bet: event.target.value })}
-                                    />
-                                
-                                </Form.Field>
-                                {this.renderNumbers()}
-                            </Form>
-                            <Dimmer page={true} active={this.state.loading}>
-                                <Loader inline active={this.state.loading}>Processing Bet...</Loader>
-                            </Dimmer>
+                            <h2>Place a bet:</h2>
+                            <Row>
+                                <Column>
+                                    <Form onSubmit={this.onSubmit}>
+                                        <Form.Field>
+                                            <label>How much Ether do you want to bet?</label>
+                                            <Input
+                                                size="small"
+                                                type="number"
+                                                label="ether"
+                                                disabled={this.state.loading}
+                                                labelPosition="right"
+                                                error={this.state.inputError}
+                                                placeholder="0.1"
+                                                value={this.state.bet}
+                                                onChange={event => this.setState({ bet: event.target.value })}
+                                            >
+                                            </Input>
+
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <label>Select a Number:</label>
+                                        </Form.Field>
+                                        {this.renderNumbers()}
+                                    </Form>
+
+                                    <Message hidden={this.state.loading} negative={this.state.error}>
+                                        <Message.Header>Status: {this.state.statusHeader}</Message.Header>
+                                        <p>{this.state.statusMessage}</p>
+                                    </Message>
+
+                                    <Message success hidden={!this.state.success} icon>
+                                        <Icon name="checkmark"/>
+                                        <Message.Content>
+                                            <Message.Header>Status: Success!</Message.Header>
+                                            <p>Transaction had been processed.</p>
+                                        </Message.Content>
+                                    </Message>
+
+                                    <Message color="yellow" hidden={!this.state.loading} icon>
+                                        <Icon name='circle notched' loading/>
+                                        <Message.Content>
+                                            <Message.Header>Status: Processing Bet</Message.Header>
+                                            <p>Transaction is currently bieng mined. Average transaction takes 15 seconds to process</p>
+                                        </Message.Content>
+                                    </Message>
+
+                                </Column>
+                            </Row>
                         </Column>
                         <Column width={8}>
-                            <Segment inverted color="grey">
-                                <h2>How it Works:</h2>
-
-
+                            <Segment>
+                                <h2>How to Play:</h2>
+                                <ol>
+                                    <li>Download the <strong><a target="_blank" href="https://metamask.io/">MetaMask Chrome Extension</a></strong>.</li>
+                                    <li>Create an account on the Rinkeby Network (Test Network).
+                                        <ul>
+                                            <li>The Rinkeby option is in the top left dropdown with the yellow square when you open MetaMask.</li>
+                                        </ul>
+                                    </li>
+                                    <li>Recieve test Ether for your account <strong><a target="_blank" href="https://faucet.rinkeby.io/">here</a></strong>.
+                                        <ul>
+                                            <li>You can copy your Ethereum address by clicking on the "..." dropdown in MetaMask</li>
+                                            <li>I recommend using Google Plus for grabbing the post url per the instructions</li>
+                                            <li>It's completly safe, don't worry :) Ether's on test accounts don't hold actual value</li>
+                                        </ul>
+                                    </li>
+                                    <li>Place a bet!</li>
+                                </ol>
                             </Segment>
                         </Column>
                     </Row>
 
-                    <Row>
+                    <Row style={{ marginBottom: '20px' }}>
                         <Column>
                             <Divider />
-                        </Column>
-                    </Row>
-
-                    <Row>
-                        <Column>
+                            <div style={{ fontWeight: "bold" }}>**This application runs on the Ethereum Rinkeby Test Network and is purely for educational purposes.</div>
                         </Column>
                     </Row>
                     
-
                 </Grid>
             </Layout>
         )
