@@ -202,17 +202,17 @@ class App extends Component {
                                         {this.renderNumbers()}
                                     </Form>
 
-                                    <Message hidden={this.state.loading} negative={this.state.error}>
-                                        <Message.Header>Status: {this.state.statusHeader}</Message.Header>
-                                        <p>{this.state.statusMessage}</p>
-                                    </Message>
-
                                     <Message success hidden={!this.state.success} icon>
-                                        <Icon name="checkmark"/>
+                                        <Icon name="checkmark" />
                                         <Message.Content>
                                             <Message.Header>Status: Success!</Message.Header>
                                             <p>Transaction had been processed.</p>
                                         </Message.Content>
+                                    </Message>
+
+                                    <Message hidden={this.state.loading} negative={this.state.error}>
+                                        <Message.Header>Status: {this.state.statusHeader}</Message.Header>
+                                        <p>{this.state.statusMessage}</p>
                                     </Message>
 
                                     <Message color="yellow" hidden={!this.state.loading} icon>
