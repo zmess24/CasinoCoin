@@ -8,6 +8,7 @@
     "compile-test": "node ./ethereum/compile.js && npm run test",
     "deploy": "node ./ethereum/deploy.js",
     "build": "next build",
+    "heroku-postbuild": "next build",
     "start": "next start",
     "dev": "next"
   },
