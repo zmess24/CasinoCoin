@@ -7,7 +7,7 @@ class Header extends Component {
         return (
             <Menu inverted>
                 <Menu.Item name="logo">
-                    <img src="/static/logo.jpg" />
+                    <img src="/static/logo.png" />
                 </Menu.Item>
                 <Menu.Item name="Casi">CasinoCoin</Menu.Item>
             </Menu>
