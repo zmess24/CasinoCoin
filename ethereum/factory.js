@@ -3,7 +3,7 @@ import Casino from './build/Casino.json';
 
 const instance = new web3.eth.Contract(
     JSON.parse(Casino.interface), // Contract interface
-    '0x2F05A8e3e131Ec5150d6f7AA1A6860B5a251a095' // Contract address on network
+    '0xf142b6C77d921d76C95D4EB4e1D1E8027E893041' // Contract address on network
 );
 
 export default instance;
