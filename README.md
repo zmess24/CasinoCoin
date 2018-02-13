@@ -1,6 +1,12 @@
 <h1>CasinoCoin</h1>
 
-A simple decentralized Ethereum betting application built for educational purposes.
+A simple decentralized Ethereum betting application built for educational purposes on the Rinkeby Network.
+
+## How it Works
+
+1. Allows users to bet test Ether on a number from one to 10.
+2. After 10 bets have been placed, the smart contract randomly selectes a winning number and deposits the balance of the contract into the winner(s) account(s). The terms of the contract are then reset.
+3. If no winners have been selected, the balance carries over into drawing (similar to the lottery).
 
 ## Get Started
 
