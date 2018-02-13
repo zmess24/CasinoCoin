@@ -24,7 +24,7 @@ CasinoCoin is build using the following technologies:
 |  [Semantic UI React](https://github.com/Semantic-Org/Semantic-UI-React) |  Development framework that helps create beautiful, responsive layouts using human-friendly HTML.     |
 |  [Solc](https://github.com/ethereum/solc-js) |  JavaScript bindings for the Solidity compiler.     |
 |  [Ganache CLI](https://github.com/trufflesuite/ganache-cli) |  Command line version of Ganache, your personal blockchain for Ethereum development.     |
-|  [Truffle-hdwallet-provider](https://github.com/trufflesuite/truffle-hdwallet-provider) |  HD Wallet-enabled Web3 provider. Use it to sign transactions for addresses derived from a 12-word mnemonic. |
 |  [Web3](https://github.com/ethereum/web3.js/) |  API that allows you to interact with a local or remote ethereum node, using a HTTP or IPC connection.     |
-|  [Mocha](https://github.com/mochajs/mocha) |  feature-rich and asynchronous JavaScript test framework running on Node.js and in the browser   |
+|  [Truffle Hdwallet Provider](https://github.com/trufflesuite/truffle-hdwallet-provider) |  HD Wallet-enabled Web3 provider. Use it to sign transactions for addresses derived from a 12-word mnemonic. |
+|  [Mocha](https://github.com/mochajs/mocha) |  Feature-rich and asynchronous JavaScript test framework running on Node.js and in the browser   |
 
