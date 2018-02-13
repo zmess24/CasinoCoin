@@ -10,7 +10,7 @@ A simple decentralized Ethereum betting application built for educational purpos
 
 ## Get Started
 
-1. **Clone the project**. `git clone https://github.com/zmess24/Ethereum-Casino.git`.
+1. **Clone the project**. `git clone https://github.com/zmess24/CasinoCoin.git`.
 2. **Run the setup script**. `npm run install`
 3. **Run the example app**. `npm run dev`
 
